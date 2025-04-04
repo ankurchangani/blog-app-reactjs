@@ -1,0 +1,15 @@
+/* Background Color: bg-gray-100 → #f3f4f6
+
+Text Color: text-gray-900 → #111827
+
+View Color (Cards, Buttons, Sections): bg-blue-500 → #3b82f6
+
+Accent Color (Hover Effects, Links, Highlights): text-emerald-500 → #10b981 */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #f3f4f6;
+}
