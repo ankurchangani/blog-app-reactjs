@@ -23,6 +23,8 @@ A modern and responsive blog application built using **React.js**, **Tailwind CS
 |----------|-------------|--------------|-------------|--------------|
 | React.js | Firebase DB | Cloudinary   | Firebase    | Tailwind CSS |
 
+![image alt](https://github.com/ankurchangani/blog-app-reactjs/blob/e3a62a5c304472ac11d1f7d431b3f05374d1ea4b/blog-BKU_efeZ.png)
+
 ---
 
 ## 📦 Installation
