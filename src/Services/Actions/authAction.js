@@ -24,21 +24,32 @@ export const registerAction = (data) => async (dispatch) => {
 
 export const loginAction = (data) => async (dispatch) => {
     try {
-        if (!data.email || !data.password) { 
-            dispatch(loginError("Email and password are required"));
-            return;
-        }
-
-        const userCredentials = await signInWithEmailAndPassword(auth, data.email, data.password);
-        const user = userCredentials.user;
-
-        localStorage.setItem("userId", user.uid); 
-        
-        dispatch(loginSuccess({ uid: user.uid })); 
+      if (!data.email || !data.password) {
+        dispatch(loginError("Email and password are required"));
+        return;
+      }
+  
+      const userCredentials = await signInWithEmailAndPassword(auth, data.email, data.password);
+      const user = userCredentials.user;
+  
+      localStorage.setItem("userId", user.uid);
+      dispatch(loginSuccess({ uid: user.uid }));
     } catch (error) {
-        dispatch(loginError(error.message));
+      let errorMessage = "Something went wrong. Please try again or sign up with a valid email.";
+  
+      if (error.code === "auth/user-not-found") {
+        errorMessage = "No user found with this email. Please register first.";
+      } else if (error.code === "auth/wrong-password") {
+        errorMessage = "Incorrect password. Please try again.";
+      } else if (error.code === "auth/invalid-email") {
+        errorMessage = "The email address is invalid.";
+      }
+  
+      dispatch(loginError(errorMessage));
     }
-};
+  };
+  
+
 
 export const logoutAction = () => async (dispatch) => {
     try {

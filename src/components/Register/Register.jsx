@@ -10,24 +10,52 @@ const RegisterForm = () => {
     password: '',
     confirmPassword: '',
   });
+
+  const [errors, setErrors] = useState({
+    password: '',
+    confirmPassword: '',
+  });
+
   const [showPopup, setShowPopup] = useState(false);
 
   const navigate = useNavigate();
-  
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    // Live validation
+    if (name === 'password') {
+      if (value.length < 6) {
+        setErrors((prev) => ({ ...prev, password: 'Password must be at least 6 characters' }));
+      } else {
+        setErrors((prev) => ({ ...prev, password: '' }));
+      }
+    }
+
+    if (name === 'confirmPassword') {
+      if (value !== formData.password) {
+        setErrors((prev) => ({ ...prev, confirmPassword: 'Passwords do not match' }));
+      } else {
+        setErrors((prev) => ({ ...prev, confirmPassword: '' }));
+      }
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match');
+    if (formData.password.length < 6) {
+      setErrors((prev) => ({ ...prev, password: 'Password must be at least 6 characters' }));
       return;
     }
+
+    if (formData.password !== formData.confirmPassword) {
+      setErrors((prev) => ({ ...prev, confirmPassword: 'Passwords do not match' }));
+      return;
+    }
+
     dispatch(registerAction(formData));
     setShowPopup(true);
   };
@@ -64,7 +92,7 @@ const RegisterForm = () => {
               />
             </div>
 
-            <div className="mb-4">
+            <div className="mb-1">
               <label className="block text-gray-700">Password</label>
               <input
                 type="password"
@@ -72,11 +100,16 @@ const RegisterForm = () => {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-[#7886C7] text-white focus:ring-2 focus:outline-none"
+                className={`w-full px-4 py-2 border ${
+                  errors.password ? 'border-red-500' : 'border-gray-300'
+                } rounded-lg bg-[#7886C7] text-white focus:ring-2 focus:outline-none`}
               />
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+              )}
             </div>
 
-            <div className="mb-4">
+            <div className="mb-4 mt-3">
               <label className="block text-gray-700">Confirm Password</label>
               <input
                 type="password"
@@ -84,8 +117,13 @@ const RegisterForm = () => {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-[#7886C7] text-white focus:ring-2 focus:outline-none"
+                className={`w-full px-4 py-2 border ${
+                  errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+                } rounded-lg bg-[#7886C7] text-white focus:ring-2 focus:outline-none`}
               />
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>
+              )}
             </div>
 
             <button
